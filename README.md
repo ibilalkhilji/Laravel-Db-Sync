@@ -62,7 +62,7 @@ Set the remote database credentials in your `config/database.php` file
 To observe changes in records and to sync with remote/local database you must `use Syncable` to your model, by default this package uses its
 own observer, but you can replace it with your own having the same code of this observer and your custom logics.
 
-You can replace the observer class from the `config/laravel-db-sync` file.
+You can replace the observer class from the `config/laravel-db-sync.php` file.
 
 ```
 ...
@@ -75,7 +75,7 @@ You can replace the observer class from the `config/laravel-db-sync` file.
 ## Ignoring models
 
 You can also create a base model with `use Syncable` and can extend your child models, in this case if you ever wanted to ignore a certain
-model(s) you can ignore them by specifying in the `config/laravel-db-sync` file like this:
+model(s) you can ignore them by specifying in the `config/laravel-db-sync.php` file like this:
 
 ```
 ...
@@ -103,7 +103,7 @@ After setting up connections in the `config/database.php` file you must have to 
 
 | Event             | Description |
 |-------------------|---|
-| NoTargetDefined   | Fired when no remote database defined in config `config/laravel-db-config.php` file.   |
+| NoTargetDefined   | Fired when no remote database defined in config `config/laravel-db-sync.php` file.   |
 | SyncSuccess       | Fired when each job successfully processed.  |
 | SyncFailed        | Fired when a job in not processed successfully.  |
 
