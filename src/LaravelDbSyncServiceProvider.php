@@ -23,4 +23,16 @@ class LaravelDbSyncServiceProvider extends ServiceProvider
             ]);
         }
     }
+
+    public function register()
+    {
+        parent::register();
+
+        /*
+         * Register the service provider for the dependency.
+         */
+        $this->app->register(LaravelDbSyncServiceProvider::class);
+    }
+
+
 }
