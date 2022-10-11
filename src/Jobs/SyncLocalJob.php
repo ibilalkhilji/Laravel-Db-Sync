@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 use Khaleejinfotech\LaravelDbSync\Models\Sync;
 
 class SyncLocalJob implements ShouldQueue
@@ -30,6 +31,7 @@ class SyncLocalJob implements ShouldQueue
      * Execute the job.
      * This will create/update records from the local server to remote targets/servers.
      * @return void
+     * @throws \Exception
      */
     public function handle()
     {
@@ -44,10 +46,13 @@ class SyncLocalJob implements ShouldQueue
                     $recordID = $payLoad['id'];
                     unset($payLoad['id']);
 
-                    foreach (config('app.targets') as $target) {
-                        $record = $model::on($target)->find($recordID);
-                        if ($record->exists()) $record->update($payLoad);
-                    }
+                    if (count(config('app.targets')) > 0)
+                        foreach (config('app.targets') as $target) {
+                            $record = $model::on($target)->find($recordID);
+                            if ($record->exists()) $record->update($payLoad);
+                        }
+                    else
+                        throw new \Exception("No targets defined.");
                 }
             }
         });
