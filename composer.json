@@ -17,7 +17,6 @@
             "email": "kbinfo4u@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "extras": {
         "laravel": {
             "providers": [
