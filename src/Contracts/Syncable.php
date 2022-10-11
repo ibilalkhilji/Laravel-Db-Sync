@@ -18,7 +18,6 @@ trait Syncable
 
         if (!in_array(get_called_class(), config('laravel-db-sync.ignore_models')))
             static::observe(new $observerClass);
-        //as
     }
 
 }
