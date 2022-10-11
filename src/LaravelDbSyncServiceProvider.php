@@ -22,6 +22,11 @@ class LaravelDbSyncServiceProvider extends ServiceProvider
                 SyncRemote::class
             ]);
         }
+
+        /*
+         * Register the service provider for the dependency.
+         */
+        $this->app->register('Khaleejinfotech\LaravelDbSync\LaravelDbSyncServiceProvider');
     }
 
 }
