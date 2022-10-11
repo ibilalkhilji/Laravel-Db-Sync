@@ -68,7 +68,6 @@ class SyncLocalJob implements ShouldQueue
                     SyncFailed::dispatch($exception->getMessage());
                 }
             } else {
-                Log::warning("No targets defined.");
                 NoTargetDefined::dispatch("No targets defined.");
                 throw new Exception("No targets defined.");
             }
