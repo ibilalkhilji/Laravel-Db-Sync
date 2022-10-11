@@ -3,14 +3,16 @@
 namespace Khaleejinfotech\LaravelDbSync\Jobs;
 
 
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Khaleejinfotech\LaravelDbSync\Events\SyncNoTarget;
+use Khaleejinfotech\LaravelDbSync\Events\NoTargetDefined;
+use Khaleejinfotech\LaravelDbSync\Events\SyncFailed;
+use Khaleejinfotech\LaravelDbSync\Events\SyncSuccess;
 use Khaleejinfotech\LaravelDbSync\Models\Sync;
 
 class SyncLocalJob implements ShouldQueue
@@ -18,6 +20,7 @@ class SyncLocalJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $model;
+    private $tag = "LaravelDbSync";
 
     /**
      * Create a new job instance.
@@ -33,36 +36,50 @@ class SyncLocalJob implements ShouldQueue
      * Execute the job.
      * This will create/update records from the local server to remote targets/servers.
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {
         $model = new $this->model->model; // Creating model class
         $model::withoutEvents(function () use ($model) {
-            $payLoad = json_decode($this->model->payload, true);
-            if ($this->model->action == 'create') {
-                if (\Arr::exists($payLoad, 'id')) unset($payLoad['id']);
-                $model->create($payLoad);
-            } elseif ($this->model->action == 'update') {
-                if (\Arr::exists($payLoad, 'id')) {
-                    $recordID = $payLoad['id'];
-                    unset($payLoad['id']);
-
-                    if (count(config('laravel-db-sync.targets')) > 0)
+            if (count(config('laravel-db-sync.targets')) > 0) {
+                try {
+                    $payLoad = json_decode($this->model->payload, true);
+                    if ($this->model->action == 'create') {
+                        if (\Arr::exists($payLoad, 'id')) unset($payLoad['id']);
                         foreach (config('laravel-db-sync.targets') as $target) {
-                            $record = $model::on($target)->find($recordID);
-                            if ($record->exists()) $record->update($payLoad);
+                            $model::on($target)->create($payLoad);
                         }
-                    else {
-                        Log::warning("No targets defined.");
-                        SyncNoTarget::dispatch("No targets defined.");
+                    } elseif ($this->model->action == 'update') {
+                        if (\Arr::exists($payLoad, 'id')) {
+                            $recordID = $payLoad['id'];
+                            unset($payLoad['id']);
+                            foreach (config('laravel-db-sync.targets') as $target) {
+                                $record = $model::on($target)->find($recordID);
+                                if ($record->exists()) $record->update($payLoad);
+                            }
+                        }
                     }
+                    SyncSuccess::dispatch();
+                    Sync::withoutEvents(function () {
+                        Sync::find($this->model->id)->update(['synced' => 1]);
+                    });
+                } catch (Exception $exception) {
+                    SyncFailed::dispatch($exception->getMessage());
                 }
+            } else {
+                Log::warning("No targets defined.");
+                NoTargetDefined::dispatch("No targets defined.");
+                throw new Exception("No targets defined.");
             }
         });
+    }
 
+    public function failed($exception)
+    {
+        Log::error("{$this->tag}:: " . $exception->getMessage());
         Sync::withoutEvents(function () {
-            Sync::find($this->model->id)->update(['synced' => 1]);
+            Sync::find($this->model->id)->update(['job_id' => null]);
         });
     }
 }

@@ -10,18 +10,20 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 
-class SyncNoTarget
+class SyncSuccess
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $message;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($message = '')
     {
-        //
+        $this->message = $message;
     }
 
     /**

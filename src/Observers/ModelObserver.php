@@ -7,17 +7,6 @@ use Khaleejinfotech\LaravelDbSync\Models\Sync;
 class ModelObserver
 {
     /**
-     * Handle the model "retrieved" event.
-     *
-     * @param  $model
-     * @return void
-     */
-    public function retrieved($model)
-    {
-        //
-    }
-
-    /**
      * Handle the model "created" event.
      *
      * @param  $model

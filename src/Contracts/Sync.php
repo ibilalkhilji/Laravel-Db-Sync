@@ -4,12 +4,12 @@ namespace Khaleejinfotech\LaravelDbSync\Contracts;
 
 use Exception;
 
-trait Sync
+trait Syncable
 {
     /**
      * @throws Exception
      */
-    public static function bootSync()
+    public static function bootSyncable()
     {
         $observerClass = config('laravel-db-sync.observer_class');
 
