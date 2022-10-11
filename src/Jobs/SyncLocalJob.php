@@ -9,6 +9,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Khaleejinfotech\LaravelDbSync\Events\SyncNoTarget;
 use Khaleejinfotech\LaravelDbSync\Models\Sync;
 
 class SyncLocalJob implements ShouldQueue
@@ -51,8 +53,10 @@ class SyncLocalJob implements ShouldQueue
                             $record = $model::on($target)->find($recordID);
                             if ($record->exists()) $record->update($payLoad);
                         }
-                    else
-                        throw new \Exception("No targets defined.");
+                    else {
+                        Log::warning("No targets defined.");
+                        SyncNoTarget::dispatch("No targets defined.");
+                    }
                 }
             }
         });
