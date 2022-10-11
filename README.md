@@ -22,7 +22,7 @@ composer require khaleejinfotech/laravel-db-sync
 You can publish the config file with:
 
 ```
-php artisan vendor:publish --provider="Khaleejinfotech\LaravelDbSync\LaravelDbSyncServiceProvider" --tag="laravel-db-config"
+php artisan vendor:publish --provider="Khaleejinfotech\LaravelDbSync\LaravelDbSyncServiceProvider" --tag="laravel-db-sync"
 ``` 
 
 ## Database Connections
@@ -62,7 +62,7 @@ Set the remote database credentials in your `config/database.php` file
 To observe changes in records and to sync with remote/local database you must `use Syncable` to your model, by default this package uses its
 own observer, but you can replace it with your own having the same code of this observer and your custom logics.
 
-You can replace the observer class from the `laravel-db-config` file.
+You can replace the observer class from the `laravel-db-sync` file.
 
 ```
 ...
