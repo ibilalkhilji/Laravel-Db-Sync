@@ -1,0 +1,28 @@
+{
+    "name": "khaleejinfotech/laravel-db-sync",
+    "description": "Sync remote database to a local database or vice-versa",
+    "type": "library",
+    "require": {
+        "ext-json": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Khaleejinfotech\\LaravelDbSync\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bilal Khilji",
+            "email": "kbinfo4u@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "extras": {
+        "laravel": {
+            "providers": [
+                "Khaleejinfotech\\LaravelDbSync\\LaravelDbSyncServiceProvider"
+            ]
+        }
+    }
+}
