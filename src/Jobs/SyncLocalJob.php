@@ -69,7 +69,7 @@ class SyncLocalJob implements ShouldQueue
                                 }
                             }
                         }
-                    }
+                    }//a
                     SyncSuccess::dispatch();
                     Sync::withoutEvents(function () {
                         Sync::find($this->model->id)->update(['synced' => 1]);
