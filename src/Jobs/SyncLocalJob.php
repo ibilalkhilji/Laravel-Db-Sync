@@ -56,7 +56,7 @@ class SyncLocalJob implements ShouldQueue
                             unset($payLoad['id']);
                             foreach (config('laravel-db-sync.targets') as $target) {
                                 $record = $model::on($target)->find($recordID);
-                                //aaasā
+
                                 if ($record->exists()) {
                                     $record->update($payLoad);
                                     if (\Arr::exists($payLoad, 'created_at')) {
