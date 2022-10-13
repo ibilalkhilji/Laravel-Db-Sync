@@ -38,7 +38,7 @@ class SyncRemote extends Command
      */
     public function handle()
     {
-        foreach (config('app.targets') as $target) {
+        foreach (config('laravel-db-sync.targets') as $target) {
             $records = Sync::on($target)->where('job_id')
                 ->where(function ($where) {
                     $where->where('synced')->orWhere('synced', 0);
