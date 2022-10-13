@@ -2,6 +2,7 @@
 
 namespace Khaleejinfotech\LaravelDbSync\Contracts;
 
+use DateTimeInterface;
 use Exception;
 
 trait Syncable
