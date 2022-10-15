@@ -49,8 +49,7 @@ class SyncLocalUploadJob implements ShouldQueue
                     foreach ($payLoad->disks as $disk) {
                         $localPath = Storage::disk($payLoad->local_disk)->getDriver()->getAdapter()->getPathPrefix();
                         if ($payLoad->fileName != '' || $payLoad->fileName != null)
-                            \Storage::disk($disk)
-                                ->put($payLoad->remote_path . "/" . $payLoad->fileName,
+                            \Storage::disk($disk)->put($payLoad->remote_path . "/" . $payLoad->fileName,
                                     file_get_contents($localPath . $payLoad->local_path . "/" . $payLoad->fileName));
                     }
                 } catch (\Exception $exception) {
