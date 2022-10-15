@@ -6,7 +6,7 @@
 
 Sync remote database to a local database or vice-versa
 
-> **Note** this requires remote MySQL accesses in order to connect to a remote MySQL database, that need to be defined in database.php
+> **Note** this requires remote MySQL connection to sync the database, and that need to be defined in database.php
 
 ## Install
 
@@ -99,13 +99,37 @@ After setting up connections in the `config/database.php` file you must have to 
 
 > Note: Please specify only remote connections here else it may cause data duplication or may fall into an error.
 
+## Defining file uploads of a model
+
+If a model handle files then in the configuration file the columns of the model should be defined so that the files can be synced to the
+local/remote servers.
+
+```
+...
+    /*\App\Models\Model::class => [
+        [
+            'column_name' => 'photo',
+            'remote_disks' => [
+                // remote disks locations from filesystem config file.
+                'ftp'
+            ],
+            'local_disk' => 'public',
+            'upload_path_local' => 'folder',
+            'upload_path_remote' => 'folder',
+        ]
+    ],*/
+...
+```
+
 ## Events
 
 | Event             | Description |
 |-------------------|---|
 | NoTargetDefined   | Fired when no remote database defined in config `config/laravel-db-sync.php` file.   |
 | SyncSuccess       | Fired when each job successfully processed.  |
-| SyncFailed        | Fired when a job in not processed successfully.  |
+| SyncFailed        | Fired when a job is not processed successfully.  |
+| SyncUploadSuccess | Fired when a file upload job successfully processed. |
+| SyncUploadFailed  | Fired when a file upload job is not processed successfully. | 
 
 ## Commands
 
