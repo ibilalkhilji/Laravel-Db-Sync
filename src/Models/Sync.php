@@ -11,4 +11,7 @@ class Sync extends Model
 
     protected $fillable = ['model', 'payload', 'action', 'job_id', 'synced'];
 
+    const ACTION_CREATE = 'create';
+    const ACTION_UPDATE = 'update';
+    const ACTION_UPLOAD = 'upload';
 }
