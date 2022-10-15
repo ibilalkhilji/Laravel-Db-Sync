@@ -20,7 +20,7 @@ class SyncLocalJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $model;
-    private $tag = "LaravelDbSync";
+    private $tag = "LaravelDbSync:: ";
 
     /**
      * Create a new job instance.
@@ -45,12 +45,12 @@ class SyncLocalJob implements ShouldQueue
             if (count(config('laravel-db-sync.targets')) > 0) {
                 try {
                     $payLoad = json_decode($this->model->payload, true);
-                    if ($this->model->action == 'create') {
+                    if ($this->model->action == Sync::ACTION_CREATE) {
                         if (\Arr::exists($payLoad, 'id')) unset($payLoad['id']);
                         foreach (config('laravel-db-sync.targets') as $target) {
                             $model::on($target)->create($payLoad);
                         }
-                    } elseif ($this->model->action == 'update') {
+                    } elseif ($this->model->action == Sync::ACTION_UPDATE) {
                         if (\Arr::exists($payLoad, 'id')) {
                             $recordID = $payLoad['id'];
                             unset($payLoad['id']);
@@ -86,7 +86,7 @@ class SyncLocalJob implements ShouldQueue
 
     public function failed($exception)
     {
-        Log::error("{$this->tag}:: " . $exception->getMessage());
+        Log::error($this->tag . $exception->getMessage());
         Sync::withoutEvents(function () {
             Sync::find($this->model->id)->update(['job_id' => null]);
         });

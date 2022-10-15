@@ -5,7 +5,7 @@ namespace Khaleejinfotech\LaravelDbSync\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Khaleejinfotech\LaravelDbSync\Jobs\SyncLocalJob;
-use Khaleejinfotech\LaravelDbSync\Jobs\SyncLocalUpload;
+use Khaleejinfotech\LaravelDbSync\Jobs\SyncLocalUploadJob;
 use Khaleejinfotech\LaravelDbSync\Models\Sync;
 
 class SyncLocal extends Command
@@ -49,7 +49,7 @@ class SyncLocal extends Command
                 if ($record->action == Sync::ACTION_CREATE || $record->action == Sync::ACTION_UPDATE)
                     $jobID = app(Dispatcher::class)->dispatch(new SyncLocalJob($record));
                 if ($record->action == Sync::ACTION_UPLOAD)
-                    $jobID = app(Dispatcher::class)->dispatch(new SyncLocalUpload($record));
+                    $jobID = app(Dispatcher::class)->dispatch(new SyncLocalUploadJob($record));
                 $record->update(['job_id' => $jobID]);
                 $this->info("Job created successfully #{$jobID}");
             }

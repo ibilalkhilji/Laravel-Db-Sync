@@ -17,8 +17,9 @@ return [
                     // remote disks locations from filesystem config file.
                     'ftp'
                 ],
-                'upload_path_local' => public_path('storage/forms'), // absolute path
-                'upload_path_remote' => 'storage/forms', // relative path
+                'local_disk' => 'public',
+                'upload_path_local' => 'forms',
+                'upload_path_remote' => 'storage/forms',
             ]
         ],*/
     ],

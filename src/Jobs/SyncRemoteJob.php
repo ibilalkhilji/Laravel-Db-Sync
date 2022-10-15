@@ -18,7 +18,7 @@ class SyncRemoteJob implements ShouldQueue
 
     private $model;
     private $target;
-    private $tag = "LaravelDbSync";
+    private $tag = "LaravelDbSync:: ";
 
     /**
      * Create a new job instance.
@@ -43,10 +43,10 @@ class SyncRemoteJob implements ShouldQueue
         $model::withoutEvents(function () use ($model) {
             try {
                 $payLoad = json_decode($this->model->payload, true);
-                if ($this->model->action == 'create') {
+                if ($this->model->action == Sync::ACTION_CREATE) {
                     if (\Arr::exists($payLoad, 'id')) unset($payLoad['id']);
                     $model->create($payLoad);
-                } elseif ($this->model->action == 'update') {
+                } elseif ($this->model->action == Sync::ACTION_UPDATE) {
                     if (\Arr::exists($payLoad, 'id')) {
                         $recordID = $payLoad['id'];
                         unset($payLoad['id']);
@@ -66,7 +66,7 @@ class SyncRemoteJob implements ShouldQueue
 
     public function failed($exception)
     {
-        Log::error("{$this->tag}:: " . $exception->getMessage());
+        Log::error($this->tag . $exception->getMessage());
         Sync::withoutEvents(function () {
             Sync::on($this->target)->find($this->model->id)->update(['job_id' => null]);
         });
