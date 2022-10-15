@@ -99,7 +99,7 @@ After setting up connections in the `config/database.php` file you must have to 
 
 > Note: Please specify only remote connections here else it may cause data duplication or may fall into an error.
 
-## Defining file uploads of a model
+## Handling file uploads of a model
 
 If a model handle files then in the configuration file the columns of the model should be defined so that the files can be synced to the
 local/remote servers.
